@@ -15,89 +15,71 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-//        buscarConExpresionRegular();
+        System.out.println("Nombre: Andrés Bravo Ruiz");
+        System.out.println("----Con expresión Regular----");
+        buscarConExpresionRegular();
+        System.out.println("");
+        System.out.println("----Sin expresión regular----");
         buscarSinExpresionRegular();
     }
 
     private static void buscarSinExpresionRegular() throws IOException {
 
-        int longitudPareNoel = 8;
-        int longitudRens = 4;
-        int longitudFollets = 5;
-
         char[] pareNoelChar = {'*','<',']',':','-','D','O', 'o'};
         char[] rensChar = {'>',':','o',')'};
         char[] folletsChar = {'<',']',':','-','D'};
 
-        int countPareNoel=0, countRens=0, countFollets=0;
-
         BufferedReader br = new BufferedReader(new FileReader("santako.txt"));
         String line = br.readLine();
-        char[] caracLine;
+        String caracs;
 
         while (line!=null){
-            caracLine = line.toCharArray();
+            int p=0, r=0, f=0;
+            int countPareNoel=0, countRens=0, countFollets=0;
 
-            int p=0, r=0, f=0, contadorCarac=0;
-            for (char c: caracLine) {
-                if(c==pareNoelChar[p]){
-                    p++;
-                    contadorCarac++;
-                    if(contadorCarac==longitudPareNoel){
-                        countPareNoel++;
-                        contadorCarac=0;
-                        p=0;
-                    }
-                    if(p>=pareNoelChar.length) p=0;
-                } else if(c==rensChar[r]){
-                    r++;
-                    contadorCarac++;
-                    if(contadorCarac==longitudRens){
-                        countRens++;
-                        contadorCarac=0;
-                        r=0;
-                    }
-                    if(r>=rensChar.length) r=0;
-                } else if(c==folletsChar[f]){
-                    f++;
-                    contadorCarac++;
-                    if(contadorCarac==longitudFollets){
-                        countFollets++;
-                        contadorCarac=0;
-                        f=0;
-                    }
-                    if(f>=folletsChar.length) f=0;
+            for (int j = 0; j <= line.length()-pareNoelChar.length ; j++) {
+                caracs = line.substring(p,j+pareNoelChar.length);
+                if(caracs.equals(String.valueOf(pareNoelChar))){
+                    countPareNoel++;
+                    countFollets--;
                 }
+                p++;
             }
 
-            if(countPareNoel>0){
-                System.out.print("Pare Noel (" + countPareNoel + ")" + " ");
+            for (int j = 0; j <= line.length()-rensChar.length ; j++) {
+                caracs = line.substring(r,j+rensChar.length);
+                if(caracs.equals(String.valueOf(rensChar))){
+                    countRens++;
+                }
+                r++;
             }
-            if(countRens>0){
-                System.out.print("Ren (" + countRens + ")"  + " ");
+
+            for (int i = 0; i <=line.length()-folletsChar.length ; i++) {
+                caracs = line.substring(f,i+folletsChar.length);
+                if(caracs.equals(String.valueOf(folletsChar))){
+                    countFollets++;
+                }
+                f++;
             }
-            if(countFollets>0){
-                System.out.print("Follet (" + countFollets + ")");
-            }
+
+            if(countPareNoel>0) System.out.print("Pare Noel (" + countPareNoel + ")" + " ");
+            if(countRens>0) System.out.print("Ren (" + countRens + ")" + " ");
+            if(countFollets>0) System.out.print("Follet (" + countFollets + ")");
 
             System.out.print("\n");
-            countPareNoel=0;
-            countRens=0;
-            countFollets=0;
-
             line = br.readLine();
         }
     }
 
     static void buscarConExpresionRegular() throws IOException {
-        int countPareNoel=0;
-        int countRens=0;
-        int countFollets=0;
-
         BufferedReader br = new BufferedReader(new FileReader("santako.txt"));
         String line = br.readLine();
 
         while (line!=null){
+            int countPareNoel=0;
+            int countRens=0;
+            int countFollets=0;
+
             Pattern patron_pareNoel = Pattern.compile(pareNoel);
             Pattern patron_rens = Pattern.compile(rens);
             Pattern patron_follets = Pattern.compile(follets);
@@ -110,17 +92,11 @@ public class Main {
             while (m_rens.find()) countRens++;
             while (m_follets.find()) countFollets++;
 
-            if(countPareNoel>0){
-                System.out.print("Pare Noel (" + countPareNoel + ")" + " ");
-            }
-            if(countRens>0){
-                System.out.print("Ren (" + countRens + ")"  + " ");
-            }
-            if(countFollets>0){
-                System.out.print("Follet (" + countFollets + ")");
-            }
+            if(countPareNoel>0) System.out.print("Pare Noel (" + countPareNoel + ")" + " ");
+            if(countRens>0) System.out.print("Ren (" + countRens + ")" + " ");
+            if(countFollets>0) System.out.print("Follet (" + countFollets + ")");
+
             System.out.print("\n");
-            countFollets=0; countPareNoel=0; countRens=0;
             line=br.readLine();
 
         }
